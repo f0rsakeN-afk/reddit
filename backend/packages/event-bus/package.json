@@ -1,0 +1,17 @@
+{
+  "name": "@reddit/event-bus",
+  "module": "./src/index.ts",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "redis": "^6.2.1"
+  }
+}

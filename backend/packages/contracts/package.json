@@ -1,0 +1,17 @@
+{
+  "name": "@reddit/contracts",
+  "module": "./src/index.ts",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "zod": "^4.5.4"
+  }
+}

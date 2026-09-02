@@ -1,12 +1,17 @@
 {
-  "name": "backend",
+  "name": "reddit-backend",
   "module": "index.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typescript": "latest"
   },
-  "peerDependencies": {
-    "typescript": "^7"
+  "workspaces": [
+    "services/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
