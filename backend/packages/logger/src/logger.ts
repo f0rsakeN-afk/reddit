@@ -1,33 +1,43 @@
-import { pino } from "pino";
+import pino from "pino";
 
-const isProd = process.env.NODE_ENV === "production";
+type LoggerOptions = {
+  serviceName: string;
+  environment: "development" | "test" | "production";
+  level?: pino.Level;
+};
 
-export const logger = pino({
-  level: isProd ? "info" : "debug",
-  base: {
-    service: process.env.SERVICE_NAME ?? "unknown-service",
-    environment: process.env.NODE_ENV ?? "development",
-  },
-  redact: {
-    paths: [
-      "password",
-      "token",
-      "accessToken",
-      "refreshToken",
-      "authorization",
-      "cookie",
-      "clientsecret",
-    ],
-    censor: "[REDACTED]",
-  },
-  transport: isProd
-    ? undefined
-    : {
-        target: "pino-pretty",
-        options: {
-          colorize: true,
-          translateTime: "SYS:standard",
-          singleLine: false,
+export function createLogger(options: LoggerOptions) {
+  const isProduction = options.environment === "production";
+
+  return pino({
+    level: options.level ?? (isProduction ? "info" : "debug"),
+
+    base: {
+      service: options.serviceName,
+      environment: options.environment,
+    },
+
+    redact: {
+      paths: [
+        "password",
+        "token",
+        "accessToken",
+        "refreshToken",
+        "authorization",
+        "cookie",
+        "clientSecret",
+      ],
+      censor: "[REDACTED]",
+    },
+
+    transport: isProduction
+      ? undefined
+      : {
+          target: "pino-pretty",
+          options: {
+            colorize: true,
+            translateTime: "SYS:standard",
+          },
         },
-      },
-});
+  });
+}
