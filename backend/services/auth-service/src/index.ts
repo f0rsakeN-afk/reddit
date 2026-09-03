@@ -1,8 +1,16 @@
 import express from "express";
 import { config } from "./config/env";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 
 const app = express();
 const PORT = config.PORT;
+
+const pool = new Pool({
+  connectionString: config.DATABASE_URL!,
+});
+
+const db = drizzle({ client: pool });
 
 app.get("/health", (req, res) => {
   res.send("ok");
