@@ -1,5 +1,6 @@
 import express from "express";
 import { config } from "./config/env";
+import { pool } from "./db";
 
 const app = express();
 const PORT = config.PORT;
@@ -18,22 +19,13 @@ const shutdown = async (signal: string) => {
   server.close(async () => {
     console.log("HTTP server closed.");
 
-    /* close db connections */
-    //await prisma.$disconnect();
-
-    /* close redis */
-    //await redis.quit();
-
-    /* kill workers */
-    //await worker.close()
+    await pool.end();
+    console.log("Database connections closed.");
 
     console.log("Everything shut down.");
     process.exit(0);
   });
 
-  //a timer can keep the node event loop alive
-  // so here unref tells not to keep entire process alive just because
-  // this timer exists
   setTimeout(() => {
     console.error("Forced shutdown after timeout.");
     process.exit(1);
