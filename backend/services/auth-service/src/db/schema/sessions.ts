@@ -1,4 +1,6 @@
+import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { refreshTokens } from "./refreshTokens";
 import { users } from "./users";
 
 export const sessions = pgTable(
@@ -22,3 +24,14 @@ export const sessions = pgTable(
     index("sessions_family_id_idx").on(table.familyId),
   ],
 );
+
+export const sessionsRelations = relations(sessions, ({ one, many }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+  refreshTokens: many(refreshTokens),
+}));
+
+export type Session = typeof sessions.$inferSelect;
+export type NewSession = typeof sessions.$inferInsert;

@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -18,3 +19,16 @@ export const passwordCredentials = pgTable("password_credentials", {
     .notNull()
     .defaultNow(),
 });
+
+export const passwordCredentialsRelations = relations(
+  passwordCredentials,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [passwordCredentials.userId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export type PasswordCredential = typeof passwordCredentials.$inferSelect;
+export type NewPasswordCredential = typeof passwordCredentials.$inferInsert;

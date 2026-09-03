@@ -7,19 +7,24 @@
   "main": "./src/index.ts",
   "scripts": {
     "dev": "bun --watch ./src/index.ts",
-    "start": "bun ./src/index.ts"
+    "start": "bun ./src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/express": "^5.0.6",
     "@types/node": "^26.4.1",
     "@types/pg": "^8.23.1",
-    "drizzle-kit": "^1.0.0-rc.4",
+    "drizzle-kit": "0.31.10",
     "tsx": "^4.23.13"
   },
   "dependencies": {
     "argon2": "^0.45.1",
-    "drizzle-orm": "^1.0.0-rc.4",
+    "drizzle-orm": "0.45.2",
+    "drizzle-zod": "^0.8.3",
     "express": "^5.2.1",
     "jose": "^6.2.10",
     "pg": "^8.23.0",

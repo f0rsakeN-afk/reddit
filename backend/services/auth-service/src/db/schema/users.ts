@@ -1,5 +1,16 @@
-import { varchar } from "drizzle-orm/cockroach-core";
-import { pgEnum, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import {
+  pgEnum,
+  pgTable,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
+import { passwordCredentials } from "./credentials";
+import { emailVerificationTokens } from "./emailVerificationTokens";
+import { passwordResetTokens } from "./passwordResetTokens";
+import { securityEvents } from "./securityEvents";
+import { sessions } from "./sessions";
 
 export const userStatusEnum = pgEnum("user_status", [
   "ACTIVE",
@@ -26,3 +37,17 @@ export const users = pgTable("users", {
     .notNull()
     .defaultNow(),
 });
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+  passwordCredentials: one(passwordCredentials, {
+    fields: [users.id],
+    references: [passwordCredentials.userId],
+  }),
+  sessions: many(sessions),
+  passwordResetTokens: many(passwordResetTokens),
+  emailVerificationTokens: many(emailVerificationTokens),
+  securityEvents: many(securityEvents),
+}));
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;

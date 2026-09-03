@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { sessions } from "./sessions";
 
@@ -19,3 +20,13 @@ export const refreshTokens = pgTable(
   },
   (table) => [index("refresh_tokens_session_id_idx").on(table.sessionId)],
 );
+
+export const refreshTokensRelations = relations(refreshTokens, ({ one }) => ({
+  session: one(sessions, {
+    fields: [refreshTokens.sessionId],
+    references: [sessions.id],
+  }),
+}));
+
+export type RefreshToken = typeof refreshTokens.$inferSelect;
+export type NewRefreshToken = typeof refreshTokens.$inferInsert;
